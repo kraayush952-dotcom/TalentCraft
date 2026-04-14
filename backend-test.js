@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function test() {
     const api = axios.create({
-        baseURL: "http://localhost:3000",
+        baseURL: "https://talentcraft-2.onrender.com",
         withCredentials: true
     })
     try {
