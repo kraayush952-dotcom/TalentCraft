@@ -2,7 +2,7 @@ import axios from "axios"
 
 
 const api = axios.create({
-    baseURL: "https://talentcraft-2.onrender.com",
+    baseURL: "https://talentcraft-3.onrender.com",
     withCredentials: true
 })
 

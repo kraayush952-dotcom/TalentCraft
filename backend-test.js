@@ -1,20 +1,22 @@
-const axios = require('axios');
-
 async function test() {
-    const api = axios.create({
-        baseURL: "https://talentcraft-2.onrender.com",
-        withCredentials: true
-    })
     try {
-        const res = await api.post('/api/auth/register', {
+        const payload = {
             username: 'testuser_' + Date.now(),
             email: 'test' + Date.now() + '@example.com',
             password: 'password123'
+        };
+        const response = await fetch("https://talentcraft-3.onrender.com/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
         });
-        console.log("Register response", res.status, res.headers['set-cookie']);
-        console.log(res.data);
+        const data = await response.json();
+        console.log("Register response", response.status);
+        console.log(data);
     } catch(err) {
-        console.error("Register Error:", err.response?.data);
+        console.error("Register Error:", err);
     }
 }
 test();
