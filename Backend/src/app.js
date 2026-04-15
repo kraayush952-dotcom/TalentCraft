@@ -4,22 +4,29 @@ const cors = require("cors")
 
 const app = express()
 
+const allowedOrigin = "https://talent-craft-inky.vercel.app"
+
+// ✅ CORS FIRST
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true
+}))
+
+// ✅ Preflight fix (VERY IMPORTANT)
+app.options("*", cors({
+  origin: allowedOrigin,
+  credentials: true
+}))
+
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174","https://talent-craft-41k4.vercel.app/"],
-    credentials: true
-}))
 
 /* require all the routes here */
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-
 /* using all the routes here */
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
-
-
 
 module.exports = app
