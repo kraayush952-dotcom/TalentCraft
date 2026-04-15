@@ -6,26 +6,35 @@ const app = express()
 
 const allowedOrigin = "https://talent-craft-inky.vercel.app"
 
-// ✅ CORS FIRST
+// ✅ 1. CORS FIRST
 app.use(cors({
   origin: allowedOrigin,
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }))
 
-// ✅ Preflight fix (VERY IMPORTANT)
-app.options("*", cors({
-  origin: allowedOrigin,
-  credentials: true
-}))
+// ✅ 2. FORCE handle preflight (THIS IS YOUR MAIN FIX)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", allowedOrigin)
+  res.header("Access-Control-Allow-Credentials", "true")
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200)  // 🔥 IMPORTANT
+  }
+
+  next()
+})
 
 app.use(express.json())
 app.use(cookieParser())
 
-/* require all the routes here */
+// routes
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-/* using all the routes here */
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
